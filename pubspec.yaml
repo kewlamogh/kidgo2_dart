@@ -1,0 +1,41 @@
+name: KidGo2
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.8.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  english_words: ^4.0.0
+  provider: ^6.1.5
+  http: ^1.4.0
+  just_audio: ^0.10.4
+  path_provider: ^2.1.1
+  intl: ^0.20.2
+  record: ^6.0.0
+  permission_handler: 12.0.0+1
+  timeago: ^3.6.0
+  nfc_manager: ^3.3.0 
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  amplify_flutter: ^2.0.0
+  amplify_auth_cognito: ^2.0.0
+  amplify_authenticator: ^2.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  hive_generator: ^2.0.1
+  build_runner: ^2.4.6
+
+flutter:
+  uses-material-design: true
+  assets: 
+    - assets/audio/friends_page.mp3
+    - assets/audio/chat_page.mp3
+    - assets/audio/add_friend_page.mp3
+    - assets/images/logo.jpeg
