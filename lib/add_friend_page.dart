@@ -24,15 +24,15 @@ class AddFriendPageState extends State<AddFriendPage> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       final state = context.read<MyAppState>();
       username = state.user;
-      _writeNfcTag();
+      await _writeNfcTag();
       writtenTag = true;
       state.tts.playIfNotViewedAlready("add_friend_page");
+      print("starting session");
+      _startNfcSession();
     });
-
-    _startNfcSession();
   }
 
   void _startNfcSession() async {
@@ -48,6 +48,7 @@ class AddFriendPageState extends State<AddFriendPage> {
 
     NfcManager.instance.startSession(
       onDiscovered: (NfcTag tag) async {
+        print("hell");
         try {
           final ndef = Ndef.from(tag);
           if (ndef == null || ndef.cachedMessage == null) {
@@ -71,10 +72,7 @@ class AddFriendPageState extends State<AddFriendPage> {
           // Here you’d add `receivedId` to your friend list in DB
           print("Friend ID received: $receivedId");
           await widget.manager.addFriend(username, receivedId);
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => FriendsPage()),
-          );
+          Navigator.pushNamed(context, '/friends');
         } catch (e) {
           setState(() {
             _icon = Icons.error;
@@ -128,10 +126,14 @@ class AddFriendPageState extends State<AddFriendPage> {
 
   @override
   void dispose() {
-    var appState = Provider.of<MyAppState>(context, listen: false);
-    appState.tts.stop();
-    NfcManager.instance.stopSession();
     super.dispose();
+    try {
+      var appState = Provider.of<MyAppState>(context, listen: false);
+      appState.tts.stop();
+      NfcManager.instance.stopSession();
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override

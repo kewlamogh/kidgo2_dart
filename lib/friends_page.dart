@@ -69,7 +69,7 @@ class _FriendsPageState extends State<FriendsPage> {
             child: Column(
               children: [
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.8,
+                  height: MediaQuery.of(context).size.height * 0.6,
                   width: MediaQuery.of(context).size.width * 0.8,
                   child: Column(
                     children: [
