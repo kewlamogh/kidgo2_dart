@@ -6,7 +6,6 @@ import "../state.dart";
 class FriendCard extends StatelessWidget {
   final String friend;
   FriendCard({super.key, required this.friend});
-  final friendLoader = FriendsManager();
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +52,7 @@ class FriendCard extends StatelessWidget {
                   TextButton(
                     onPressed: () {
                       print("i'm not your fwend");
-                      friendLoader.deleteFriend(appState.user, friend);
+                      FriendsManager.deleteFriend(appState.user, friend);
                     },
                     child: Text("Unfriend"),
                   ),

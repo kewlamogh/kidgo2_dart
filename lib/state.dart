@@ -23,6 +23,7 @@ class MyAppState extends ChangeNotifier {
   var messages = <Message>[];
   final tts = TTS();
   late final String email;
+  String friendCode = "";
 
   Future<void> init() async {
     var currUser = await Amplify.Auth.getCurrentUser();
@@ -33,11 +34,13 @@ class MyAppState extends ChangeNotifier {
         .firstWhere((attr) => attr.userAttributeKey.key == 'email')
         .value;
 
-    var friendsLoader = FriendsManager();
-    await friendsLoader.load(user); // assuming this is async too?
-    friends = friendsLoader.friends;
-
+    loadFriends();
     notifyListeners();
+  }
+
+  Future<void> loadFriends() async {
+    await FriendsManager.load(user); // assuming this is async too?
+    friends = FriendsManager.friends;
   }
 
   String processPresignUrl(String url) {
@@ -46,16 +49,16 @@ class MyAppState extends ChangeNotifier {
 }
 
 class FriendsManager {
-  var friends = <String>[];
+  static var friends = <String>[];
 
-  bool isStubUser(Map<String, dynamic> user) {
+  static bool isStubUser(Map<String, dynamic> user) {
     return user["email"] == "" ||
         user["username"] == "" ||
         user["friends"] == null ||
         user["groups"] == null;
   }
 
-  Future<void> load(String user) async {
+  static Future<void> load(String user) async {
     var url = Uri.parse("$apiUrl/users/get/get?username=$user");
 
     try {
@@ -79,7 +82,36 @@ class FriendsManager {
     }
   }
 
-  Future<void> deleteFriend(String user, String friend) async {
+  static Future<String> getCode(String user) async {
+    var url = Uri.parse("$apiUrl/friends/code/code?username=$user");
+
+    try {
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        print(response.body);
+        return response.body;
+      }
+    } catch (e) {
+      return "error $e";
+    }
+
+    return "";
+  }
+
+  static Future<bool> gotCode(String user, String code) async {
+    var url = Uri.parse("$apiUrl/friends/got/got?username=$user&code=$code");
+
+    try {
+      final response = await http.get(url);
+      load(user);
+      return response.statusCode == 200;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  static Future<void> deleteFriend(String user, String friend) async {
     final url = Uri.parse('$apiUrl/friends/delete/delete');
 
     try {
@@ -97,28 +129,6 @@ class FriendsManager {
       }
     } catch (e) {
       friends = ['Error: $e'];
-    }
-  }
-
-  Future<void> addFriend(String user, String friend) async {
-    final url = Uri.parse('$apiUrl/friends/add/add');
-    var friends = [];
-
-    try {
-      final request = http.Request("POST", url)
-        ..headers['Content-Type'] = 'application/json'
-        ..body = jsonEncode({'name': user, 'friend_name': friend});
-
-      final streamedResponse = await request.send();
-      final response = await http.Response.fromStream(streamedResponse);
-
-      if (response.statusCode == 200) {
-        friends.add(friend);
-      } else {
-        print("error adding friend");
-      }
-    } catch (e) {
-      print("err $e");
     }
   }
 }

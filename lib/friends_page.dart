@@ -30,7 +30,7 @@ class _FriendsPageState extends State<FriendsPage> {
     await state.init();
     final user = state.user;
     state.tts.playIfNotViewedAlready("friends_page");
-    await fm.load(user);
+    await FriendsManager.load(user);
     setState(() {
       isLoading = false;
     });
@@ -73,7 +73,7 @@ class _FriendsPageState extends State<FriendsPage> {
                   width: MediaQuery.of(context).size.width * 0.8,
                   child: Column(
                     children: [
-                      fm.friends.isEmpty
+                      FriendsManager.friends.isEmpty
                           ? Text(
                               "Looks like you haven't made any friends yet. Click on the \"Add Friend\" button below to make one.",
                             )
@@ -81,7 +81,7 @@ class _FriendsPageState extends State<FriendsPage> {
                               child: isLoading
                                   ? Center(child: CircularProgressIndicator())
                                   : ListView(
-                                      children: fm.friends
+                                      children: FriendsManager.friends
                                           .map(
                                             (friend) => Center(
                                               child: FriendCard(friend: friend),
