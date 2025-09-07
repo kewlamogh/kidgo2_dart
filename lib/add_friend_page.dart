@@ -1,4 +1,3 @@
-
 import 'package:KidGo2/friends_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -155,12 +154,7 @@ class AddFriendPageState extends State<AddFriendPage> {
                               entered,
                             )) {
                               await appState.loadFriends();
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => FriendsPage(),
-                                ),
-                              );
+                              Navigator.pop(context);
                             }
                           },
                           child: const Text("Submit"),

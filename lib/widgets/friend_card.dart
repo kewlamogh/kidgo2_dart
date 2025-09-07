@@ -53,6 +53,7 @@ class FriendCard extends StatelessWidget {
                     onPressed: () {
                       print("i'm not your fwend");
                       FriendsManager.deleteFriend(appState.user, friend);
+                      appState.loadFriends();
                     },
                     child: Text("Unfriend"),
                   ),

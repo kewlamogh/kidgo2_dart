@@ -24,6 +24,7 @@ dependencies:
   amplify_flutter: ^2.0.0
   amplify_auth_cognito: ^2.0.0
   amplify_authenticator: ^2.0.0
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   flutter_test:
