@@ -73,23 +73,19 @@ class _FriendsPageState extends State<FriendsPage> {
                   width: MediaQuery.of(context).size.width * 0.8,
                   child: Column(
                     children: [
-                      FriendsManager.friends.isEmpty
-                          ? Text(
-                              "Looks like you haven't made any friends yet. Click on the \"Add Friend\" button below to make one.",
-                            )
-                          : Expanded(
-                              child: isLoading
-                                  ? Center(child: CircularProgressIndicator())
-                                  : ListView(
-                                      children: FriendsManager.friends
-                                          .map(
-                                            (friend) => Center(
-                                              child: FriendCard(friend: friend),
-                                            ),
-                                          )
-                                          .toList(),
-                                    ),
-                            ),
+                      Expanded(
+                        child: isLoading
+                            ? Center(child: CircularProgressIndicator())
+                            : ListView(
+                                children: FriendsManager.friends
+                                    .map(
+                                      (friend) => Center(
+                                        child: FriendCard(friend: friend),
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
+                      ),
                     ],
                   ),
                 ),

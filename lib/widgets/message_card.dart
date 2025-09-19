@@ -37,7 +37,7 @@ class _MessageCardState extends State<MessageCard> {
     super.initState();
     _player = AudioPlayer();
     _playerSubscription = _player.playerStateStream.listen((state) {
-      if (!mounted) return; // ✅ only update if still in the tree
+      if (!mounted) return; 
       setState(() {
         print(state.processingState);
 
@@ -62,7 +62,7 @@ class _MessageCardState extends State<MessageCard> {
   void dispose() {
     var appState = context.watch<MyAppState>();
     appState.tts.stop();
-    _playerSubscription.cancel(); // ✅ stop listening
+    _playerSubscription.cancel();
     _player.dispose(); // optional but good cleanup
     super.dispose();
   }

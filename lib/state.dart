@@ -24,6 +24,7 @@ class MyAppState extends ChangeNotifier {
   final tts = TTS();
   late final String email;
   String friendCode = "";
+  bool loading = false;
 
   Future<void> init() async {
     var currUser = await Amplify.Auth.getCurrentUser();
@@ -39,8 +40,10 @@ class MyAppState extends ChangeNotifier {
   }
 
   Future<void> loadFriends() async {
+    loading = true;
     await FriendsManager.load(user); // assuming this is async too?
     friends = FriendsManager.friends;
+    loading = false;
   }
 
   String processPresignUrl(String url) {
@@ -50,6 +53,7 @@ class MyAppState extends ChangeNotifier {
 
 class FriendsManager {
   static var friends = <String>[];
+  static var loaded = false;
 
   static bool isStubUser(Map<String, dynamic> user) {
     return user["email"] == "" ||
@@ -59,6 +63,7 @@ class FriendsManager {
   }
 
   static Future<void> load(String user) async {
+    loaded = false;
     var url = Uri.parse("$apiUrl/users/get/get?username=$user");
 
     try {
@@ -80,6 +85,8 @@ class FriendsManager {
     } catch (e) {
       friends = ["Error: $e"];
     }
+
+    loaded = true;
   }
 
   static Future<String> getCode(String user) async {
