@@ -1,3 +1,2 @@
 # kidgo2
-
-A new Flutter project.
+social media for kids
